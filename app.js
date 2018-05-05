@@ -32,7 +32,9 @@ app.use((req, res, next)=>{
 	next();
 });
 
-
+app.get('/',(req,res,next)=>{
+	res.send("<h1>Under construction</h1><br><h2>Kua mpole!!!!!</h2>");
+});
 app.use('/products', productRoutes);
 app.use('/category', categoryRoutes);
 app.use('/users', userRoutes);
