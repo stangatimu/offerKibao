@@ -15,7 +15,7 @@ app.use(morgan('dev'));
 app.use('/uploads',express.static('uploads'));
 app.use(bodyparser.urlencoded({extended:false}));
 app.use(bodyparser.json());
-mongoose.connect("mongodb://hapi:Mynameisstan1@ds115740.mlab.com:15740/hapidb",()=>{
+mongoose.connect(process.env.database,()=>{
 	console.log("connected to mlab");
 });
 
