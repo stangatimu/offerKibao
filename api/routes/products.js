@@ -37,11 +37,11 @@ router.get('/category/:id',productsController.products_get_category);
 
 router.get('/subcategory/:subId',productsController.products_get_subcategory);
 
-router.get('/user/:id',productsController.products_get_user_products);
+router.get('/user/:id',checkAuth,productsController.products_get_user_products);
 
 router.post('/',checkAuth,upload.single('image'), productsController.products_create );
 
 
 router.patch('/:id',checkAuth, productsController.products_patch);
-router.delete('/:id', productsController.products_delete);
+router.delete('/:id',checkAuth, productsController.products_delete);
 module.exports = router;
