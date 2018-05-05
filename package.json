@@ -2,10 +2,13 @@
   "name": "shop",
   "version": "1.0.0",
   "description": "A restful API for a shop application",
+  "engines": {
+    "node": "8.9.4"
+  },
   "main": "server.js",
   "scripts": {
     "test": "snyk test",
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "author": "Stanley Gatimu",
   "license": "ISC",
