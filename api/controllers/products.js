@@ -12,7 +12,6 @@ exports.products_get_all = function (req, res, next) {
 	 .skip(perPage * page)
 	 .limit(perPage)
 	 .populate('author','name')
-	 .populate('category','name')
  	.exec()
  	.then(products =>{
  		if (products.length>0) {
@@ -26,7 +25,7 @@ exports.products_get_all = function (req, res, next) {
  		}
  	})
  	.catch(err=>{
- 		res.status(500).json({error:err});
+ 		res.status(500).json({error:"sorry! found errors on request"});
  	});
 }
 
@@ -46,7 +45,7 @@ exports.products_get_one = function (req, res, next) {
 		
 	})
 	.catch( err => {
-		res.status(500).json({error: err});
+		res.status(500).json({error: "sorry! found errors on request"});
 	});
 
 
@@ -75,7 +74,7 @@ exports.products_get_category = function (req, res, next) {
 		}
 	})
 	.catch(err=>{
-		res.status(500).json({error:err});
+		res.status(500).json({error:"sorry! found errors on request"});
 	});
 }
 // getting all products in a subcategory
@@ -104,7 +103,7 @@ exports.products_get_subcategory = function (req, res, next) {
 	.catch(err=>{
 		res.status(500).json({
 			success:false,
-			error:err});
+			error:"sorry! found errors on request"});
 	});
 }
 //getting all products by a specific user
@@ -131,7 +130,7 @@ exports.products_get_user_products = function (req, res, next) {
 		}
 	})
 	.catch(err=>{
-		res.status(500).json({error:err});
+		res.status(500).json({error:"sorry! found errors on request"});
 	});
 }
 
@@ -176,10 +175,13 @@ exports.products_create = function (req, res, next) {
 			newProduct = results[0];
 			category = results[1];
 			subcategory = results[2];
-			category.products++;
-			subcategory.products++;
-			subcategory.save();
-			category.save();			
+			if (category != null && subcategory != null) {
+				category.products++;
+				subcategory.products++;
+				subcategory.save();
+				category.save();
+				return next();
+			}			
 			res.status(201).json({
 				success: true,
 				message: 'your product has been posted',
