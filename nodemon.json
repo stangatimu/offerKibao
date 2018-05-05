@@ -1,0 +1,6 @@
+{
+	"env":{
+		"database":"mongodb://localhost/wapi",
+		"jwtkey":"jsonsecretkey"
+	}
+}
