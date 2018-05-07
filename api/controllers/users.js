@@ -3,8 +3,10 @@
 	   bcrypt = require("bcrypt"),
 	   crypto = require("crypto"),
 	   jwt = require("jsonwebtoken"),
-	   nodemailer = require('nodemailer'),
-	   Token = require("../models/token.js");
+	   Token = require("../models/token.js"),
+	   sgMail = require('@sendgrid/mail');
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
  exports.users_signup = (req, res, next)=>{
 	User.find({email: req.body.email})
@@ -218,20 +220,17 @@ comparePassword = (password1,user,resp)=>{
 
 //send mail function
 sendMail = (req,res, user, token)=>{
-	var transporter = nodemailer.createTransport({ 
-		service: 'gmail', 
-		auth: { user: process.env.GMAIL_USERNAME, pass: process.env.GMAIL_PASSWORD } });
-	var mailOptions = { 
-		from: process.env.GMAIL_USERNAME, 
+	var mail = { 
+		from: process.env.EMAIL, 
 		to: user.email, 
 		subject: 'Offer  Kibao Account Verification', 
 		text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/'+ req.headers.host+'\/users\/confirmation\/' + token.token + '.\n'
 	   };
-	transporter.sendMail(mailOptions, function (err) {
-		if (err) { return res.status(500).json({ msg: err.message }); }
+	   sgMail.send(mail);
+	
 		res.status(200).json({
 		  success: true,
 		  message:'A verification email has been sent to ' + user.email + ',confirm email to log in.'
 		 });
-	});
+	
 }

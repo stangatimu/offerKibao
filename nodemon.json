@@ -2,7 +2,9 @@
 	"env":{
 		"database":"mongodb://localhost/wapi",
 		"jwtkey":"jsonsecretkey",
-		"GMAIL_USERNAME":"stangatimu@gmail.com",
-		"GMAIL_PASSWORD": "Mynameisstan1gmail"
+		"SENDGRID_USERNAME":"OfferKibao",
+		"SENDGRID_PASSWORD": "Mynameisstan1gmail",
+		"EMAIL":"stangatimu@gmail.com",
+		"SENDGRID_API_KEY":"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"
 	}
 }
