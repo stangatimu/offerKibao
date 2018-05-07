@@ -1,6 +1,8 @@
 {
 	"env":{
 		"database":"mongodb://localhost/wapi",
-		"jwtkey":"jsonsecretkey"
+		"jwtkey":"jsonsecretkey",
+		"GMAIL_USERNAME":"stangatimu@gmail.com",
+		"GMAIL_PASSWORD": "Mynameisstan1gmail"
 	}
 }

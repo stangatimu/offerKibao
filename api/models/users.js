@@ -4,11 +4,8 @@ const userSchema = mongoose.Schema({
 	_id: mongoose.Schema.Types.ObjectId,
 	name:{type:String, required: true},
 	email:{type: String, required: true, unique: true},
+	isVerified: { type: Boolean, default: false },
 	password:{type: String, required: true},
-	address:{
-		city: {type: String, required: true},
-		street: {type: String, required: true},
-	},
 	created: {type: Date, default: Date.now}
 });
 

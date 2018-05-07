@@ -6,6 +6,9 @@ const express   = require('express'),
 
 router.post("/signup", usersController.users_signup); 
 
+router.get("/confirmation/:token", usersController.email_confirmation ); 
+
+router.post("/confirmation/resend", usersController.resend_confirmation);
 router.post("/login",usersController.users_login);
 
 router.delete('/:id',checkAuth, usersController.users_delete);
