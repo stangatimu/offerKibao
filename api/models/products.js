@@ -1,4 +1,5 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'),
+mongooseAlgolia = require("mongoose-algolia");
 
 const productSchema = mongoose.Schema({
 	name: {type:String, required: true},
@@ -9,8 +10,30 @@ const productSchema = mongoose.Schema({
 	normalPrice: {type: Number, required: true},
 	image: {type: String, required: true},
 	description: {type: String, required: true},
-	rating:{type:Number, default: 0},
 	created:{type: Date, default: Date.now}
 });
+productSchema.plugin(mongooseAlgolia,{
+	appId: 'NG3MLLL26O',
+	apiKey:'9f227b0ef92a72688924775c7822fb87',
+	indexName: 'offerkibaov1',
+	selector:'name author category subcategory description offerPrice normalPricr',
+	populate: {
+		path:'author category subcategory',
+		select:'name'
+	},
+	defaults:{
+		author: 'unknown'
+	},
+	mappings:{
+		name: function(value){
+			return '${value}'
+		}
+	}
+});
 
-module.exports = mongoose.model('Product', productSchema);
+let Model = mongoose.model('Product', productSchema); 
+Model.SyncToAlgolia();
+Model.SetAlgoliaSettings({
+	searchableAttributes: ['name'] 
+  });
+module.exports = Model
