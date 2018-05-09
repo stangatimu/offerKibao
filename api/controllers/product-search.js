@@ -3,7 +3,7 @@ const algoliasearch = require('algoliasearch'),
       index = client.initIndex('offerkibaov1');
 
 exports.products_search = function(req, res, next){
-    if(!req.query.query){
+    if(req.query.query == ''){
         return res.status(401).json({
             success: false,
             message:"sorry! found errors on request"
