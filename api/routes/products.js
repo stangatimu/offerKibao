@@ -3,7 +3,8 @@ const express = require('express'),
  checkAuth = require("../middleware/checkAuth.js"),
  mongoose = require("mongoose"),
  multer = require('multer'),
- productsController = require("../controllers/products.js");
+ productsController = require("../controllers/products.js"),
+ searchController = require("../controllers/product-search.js");
  
 
  const storage = multer.diskStorage({
@@ -36,6 +37,8 @@ router.get('/:id',productsController.products_get_one);
 router.get('/category/:id',productsController.products_get_category);
 
 router.get('/subcategory/:subId',productsController.products_get_subcategory);
+
+router.get('/search',searchController.products_search);
 
 router.get('/user/:id',checkAuth,productsController.products_get_user_products);
 

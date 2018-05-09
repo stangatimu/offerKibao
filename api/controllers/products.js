@@ -25,7 +25,9 @@ exports.products_get_all = function (req, res, next) {
  		}
  	})
  	.catch(err=>{
- 		res.status(500).json({error:"sorry! found errors on request"});
+ 		res.status(500).json({
+			success: false, 
+			message:"sorry! found errors on request"});
  	});
 }
 
