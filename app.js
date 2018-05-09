@@ -10,6 +10,7 @@ const express = require('express'),
 const productRoutes = require('./api/routes/products');
 const categoryRoutes = require('./api/routes/category');
 const userRoutes = require('./api/routes/users');
+const searchRoutes = require('./api/routes/search');
 app.use(helmet());
 app.use(morgan('dev'));
 app.use('/uploads',express.static('uploads'));
@@ -38,6 +39,7 @@ app.get('/',(req,res,next)=>{
 app.use('/products', productRoutes);
 app.use('/category', categoryRoutes);
 app.use('/users', userRoutes);
+app.use('/search', userRoutes);
 app.use((req,res, next)=>{
 	const error = new Error('Not found');
 	error.status = 404;
