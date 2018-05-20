@@ -41,7 +41,7 @@ app.get('/',(req,res,next)=>{
 app.use('/products', productRoutes);
 app.use('/category', categoryRoutes);
 app.use('/users', userRoutes);
-app.use('/search', userRoutes);
+app.use('/search', searchRoutes);
 app.use((req,res, next)=>{
 	const error = new Error('Not found');
 	error.status = 404;
