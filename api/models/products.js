@@ -23,11 +23,6 @@ productSchema.plugin(mongooseAlgolia,{
 	},
 	defaults:{
 		author: 'unknown'
-	},
-	mappings:{
-		name: function(value){
-			return '${value}'
-		}
 	}
 });
 
