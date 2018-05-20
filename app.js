@@ -3,7 +3,8 @@ const express = require('express'),
  morgan = require('morgan'),
  bodyparser = require("body-parser"),
  mongoose = require('mongoose'),
- helmet = require('helmet');
+ helmet = require('helmet'),
+ expressSanitizer = require("express-sanitizer");
 
 
 
@@ -11,6 +12,7 @@ const productRoutes = require('./api/routes/products');
 const categoryRoutes = require('./api/routes/category');
 const userRoutes = require('./api/routes/users');
 const searchRoutes = require('./api/routes/search');
+app.set('trust proxy', +1);
 app.use(helmet());
 app.use(morgan('dev'));
 app.use('/uploads',express.static('uploads'));
@@ -34,7 +36,7 @@ app.use((req, res, next)=>{
 });
 
 app.get('/',(req,res,next)=>{
-	res.send("<h1>Under construction</h1><br><h2>Kua mpole!!!!!</h2>");
+	res.send("");
 });
 app.use('/products', productRoutes);
 app.use('/category', categoryRoutes);

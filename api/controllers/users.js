@@ -168,7 +168,7 @@ exports.users_edit = function(req,res,next){
 }
 //deleting a particular user by ID
 exports.users_delete = function (req, res, next) {
-	var id = req.params.id;
+	var id = req.userData.userId;
 	User.remove({_id: id}).exec()
 	.then(result=>{
 		res.status(200).json({
@@ -208,6 +208,10 @@ comparePassword = (password1,user,resp)=>{
 			return resp.status(200).json({
 				success: true,
 				message:"Authentication successful",
+				user:{
+					email: user.email,
+					name: user.name
+				},
 				token: token
 			});
 		}
@@ -221,10 +225,10 @@ comparePassword = (password1,user,resp)=>{
 //send mail function
 sendMail = (req,res, user, token)=>{
 	var mail = { 
-		from: process.env.EMAIL, 
+		from: '"Stan Gatimu" <stangatimu@gmail.com>', 
 		to: user.email, 
 		subject: 'Offer  Kibao Account Verification', 
-		text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/'+ req.headers.host+'\/users\/confirmation\/' + token.token + '.\n'
+		text: 'Hello '+ user.name+',\n\nPlease verify your account by clicking the link: \nhttp:\/\/'+ req.headers.host+'\/users\/confirmation\/' + token.token + '.\n'
 	   };
 	   sgMail.send(mail);
 	

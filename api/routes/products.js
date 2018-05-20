@@ -3,7 +3,8 @@ const express = require('express'),
  checkAuth = require("../middleware/checkAuth.js"),
  mongoose = require("mongoose"),
  multer = require('multer'),
- productsController = require("../controllers/products.js");
+ productsController = require("../controllers/products.js"),
+ rateLimit = require('../middleware/rate-limit');
  
 
  const storage = multer.diskStorage({
@@ -29,19 +30,20 @@ const upload = multer({storage: storage,
 	                   fileFilter: fileFilter
                      });
 
-router.get('/', productsController.products_get_all );
+router.get('/',rateLimit.globalBF.prevent, productsController.products_get_all );
 
-router.get('/:id',productsController.products_get_one);
+router.get('/:id',rateLimit.globalBF.prevent,productsController.products_get_one);
 
-router.get('/category/:id',productsController.products_get_category);
+router.get('/category/:id',rateLimit.globalBF.prevent,productsController.products_get_category);
 
-router.get('/subcategory/:subId',productsController.products_get_subcategory);
+router.get('/subcategory/:subId',rateLimit.globalBF.prevent,productsController.products_get_subcategory);
 
-router.get('/user/:id',checkAuth,productsController.products_get_user_products);
+router.get('/user/:id',rateLimit.globalBF.prevent,checkAuth,productsController.products_get_user_products);
 
-router.post('/',checkAuth,upload.single('image'), productsController.products_create );
+router.post('/',rateLimit.globalBF.prevent,checkAuth,upload.single('image'), productsController.products_create );
 
 
-router.patch('/:id',checkAuth, productsController.products_patch);
-router.delete('/:id',checkAuth, productsController.products_delete);
+router.patch('/:id',rateLimit.globalBF.prevent,checkAuth, productsController.products_patch);
+
+router.delete('/:id',rateLimit.globalBF.prevent,checkAuth, productsController.products_delete);
 module.exports = router;
