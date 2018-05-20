@@ -27,9 +27,9 @@ exports.globalBF= new ExpressBrute(Store, {
     freeRetries: 500,
     attachResetToRequest: false,
     refreshTimeoutOnRequest: false,
-    minWait: 25*60*60*1000, // 1 day 1 hour (should never reach this wait time)
-    maxWait: 25*60*60*1000, // 1 day 1 hour (should never reach this wait time)
-    lifetime: 24*60*60, // 1 day (seconds not milliseconds)
+    minWait: 25*60*60*1000, // 1 day 1 hour 
+    maxWait: 25*60*60*1000, // 1 day 1 hour 
+    lifetime: 24*60*60, // 1 day
     failCallback: failCB,
     handleStoreError: handleSE
-});
+}); 

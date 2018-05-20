@@ -18,8 +18,8 @@ productSchema.plugin(mongooseAlgolia,{
 	indexName: 'offerkibaov1',
 	selector:'name author category subcategory description offerPrice normalPricr',
 	populate: {
-		path:'author category subcategory',
-		select:'name'
+		path:'author',
+		select:'name desceiption'
 	},
 	defaults:{
 		author: 'unknown'
@@ -34,6 +34,6 @@ productSchema.plugin(mongooseAlgolia,{
 let Model = mongoose.model('Product', productSchema); 
 Model.SyncToAlgolia();
 Model.SetAlgoliaSettings({
-	searchableAttributes: ['name'] 
+	searchableAttributes: ['name','description'] 
   });
 module.exports = Model

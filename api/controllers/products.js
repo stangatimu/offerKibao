@@ -7,8 +7,12 @@ const Product = require("../models/products.js"),
 exports.products_get_all = function (req, res, next) {
 	const perPage = 10;
 	var page = req.query.page;
+	var high = 100000000;
+	var low = 0;
+	if(req.query.high) high = req.query.high;
+	if(req.query.low) low = req.query.low;
 
-	 Product.find()
+	 Product.find({offerPrice: {$lte: high, $gte: low}})
 	 .skip(perPage * page)
 	 .limit(perPage)
 	 .populate('author','name')
@@ -56,8 +60,12 @@ exports.products_get_one = function (req, res, next) {
 exports.products_get_category = function (req, res, next) {
 	const perPage = 10;
 	var page = req.query.page;
+	var high = 100000000;
+	var low = 0;
+	if(req.query.high) high = req.query.high;
+	if(req.query.low) low = req.query.low;
 
-	Product.find({category: req.params.id})
+	Product.find({category: req.params.id,offerPrice: {$lte: high, $gte: low}})
 	.skip(perPage * page)
 	.limit(perPage)
 	.populate('author','name')
@@ -76,15 +84,21 @@ exports.products_get_category = function (req, res, next) {
 		}
 	})
 	.catch(err=>{
-		res.status(500).json({error:"sorry! found errors on request"});
+		res.status(500).json({
+			success: false,
+			message:"sorry! found errors on request"});
 	});
 }
 // getting all products in a subcategory
 exports.products_get_subcategory = function (req, res, next) {
 	const perPage = 10;
 	var page = req.query.page;
+	var high = 100000000;
+	var low = 0;
+	if(req.query.high) high = req.query.high;
+	if(req.query.low) low = req.query.low;
 
-	Product.find({subcategory: req.params.subId})
+	Product.find({subcategory: req.params.subId,offerPrice: {$lte: high, $gte: low}})
 	.skip(perPage * page )
 	.limit(perPage)
 	.populate('author','name')
@@ -105,7 +119,7 @@ exports.products_get_subcategory = function (req, res, next) {
 	.catch(err=>{
 		res.status(500).json({
 			success:false,
-			error:"sorry! found errors on request"});
+			message:"sorry! found errors on request"});
 	});
 }
 //getting all products by a specific user
@@ -132,7 +146,9 @@ exports.products_get_user_products = function (req, res, next) {
 		}
 	})
 	.catch(err=>{
-		res.status(500).json({error:"sorry! found errors on request"});
+		res.status(500).json({
+			success: false,
+			message:"sorry! found errors on request"});
 	});
 }
 
@@ -195,7 +211,7 @@ exports.products_create = function (req, res, next) {
 					_id: newProduct._id,
 					request: {
 						type: "GET",
-						url: "http://localhost:3000/products/" + newProduct.id
+						url: req.headers.host+"/products/" + newProduct.id
 					}
 				}
 			});
@@ -261,7 +277,7 @@ exports.products_delete = function (req, res, next) {
 				.catch(err => {
 					res.status(500).json({
 						success: false,
-						error: err
+						message: err
 					});
 				});
 
