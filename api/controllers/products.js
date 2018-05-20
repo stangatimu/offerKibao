@@ -44,14 +44,21 @@ exports.products_get_one = function (req, res, next) {
 	.exec()
 	.then(product =>{
 		if (product) {
-			res.status(302).json(product);
+			res.status(302).json({
+				success: true,
+				entry:product
+			});
 		} else {
-			res.status(404).json({message: 'No valid entry found for the provided id'});
+			res.status(404).json({
+				success: false,
+				message: 'No valid entry found for the provided id'});
 		}
 		
 	})
 	.catch( err => {
-		res.status(500).json({error: "sorry! found errors on request"});
+		res.status(500).json({
+			success: false,
+			message: "sorry! found errors on request"});
 	});
 
 
