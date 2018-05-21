@@ -29,10 +29,10 @@ const upload = multer({storage: storage,
 	                   fileFilter: fileFilter
                      });
 
-router.get('/',upload.single('image'), categoryController.category_get_all );
+router.get('/', categoryController.category_get_all );
 // 
 
-router.post('/', categoryController.category_create);
+router.post('/',upload.single('image'), categoryController.category_create);
 
 router.delete('/:id',checkAuth, categoryController.category_delete);
 
