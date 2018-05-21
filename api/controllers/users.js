@@ -212,7 +212,8 @@ comparePassword = (password1,user,resp)=>{
 					email: user.email,
 					name: user.name
 				},
-				token: token
+				token: token,
+				expiresIn: "7d"
 			});
 		}
 		return resp.status(401).json({
