@@ -27,7 +27,7 @@ exports.category_get_all = function (req, res, next) {
 exports.category_create = function (req, res, next) {
 	const category = new Category({
 		name: req.body.name,
-		icon: "uploads\\Fri Apr 27 2018lpgas.jpg",
+		icon: req.file.path,
 	});
 	Category.create(category,(err, newCategory)=>{
 		if (err) {
@@ -69,8 +69,7 @@ exports.category_delete = function (req, res, next) {
 // create a subcategory
 exports.subcategory_create = function (req, res, next) {
 	const subcategory = new SubCategory({
-		name: req.body.name,
-		icon: "uploads\\Fri Apr 27 2018lpgas.jpg",
+		name: req.body.name
 	});
 
 	async.waterfall([
