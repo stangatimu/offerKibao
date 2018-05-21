@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const cartegorySchema = mongoose.Schema({
     name: {type: String, required: true},
-    icon: {type: String, required: true},
+    image: {type: String, required: true},
     created:{type: Date, default: Date.now},
     subcategories:[ 
         {type: mongoose.Schema.Types.ObjectId, ref: "SubCategory"}

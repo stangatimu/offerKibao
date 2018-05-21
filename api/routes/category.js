@@ -29,8 +29,8 @@ const upload = multer({storage: storage,
 	                   fileFilter: fileFilter
                      });
 
-router.get('/', categoryController.category_get_all );
-// upload.single('image')
+router.get('/',upload.single('image'), categoryController.category_get_all );
+// 
 
 router.post('/', categoryController.category_create);
 

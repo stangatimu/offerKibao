@@ -27,7 +27,7 @@ exports.category_get_all = function (req, res, next) {
 exports.category_create = function (req, res, next) {
 	const category = new Category({
 		name: req.body.name,
-		icon: req.file.path,
+		image: req.file.path,
 	});
 	Category.create(category,(err, newCategory)=>{
 		if (err) {
