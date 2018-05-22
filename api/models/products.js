@@ -10,7 +10,11 @@ const productSchema = mongoose.Schema({
 	normalPrice: {type: Number, required: true},
 	image: {type: String, required: true},
 	description: {type: String, required: true},
-	created:{type: Date, default: Date.now}
+	created:{type: Date, default: Date.now},
+	coords:{
+		lat: {type: Number, required: true},
+		lon: {type: Number, required: true}
+	}
 });
 productSchema.plugin(mongooseAlgolia,{
 	appId: 'NG3MLLL26O',
@@ -19,7 +23,7 @@ productSchema.plugin(mongooseAlgolia,{
 	selector:'name author category subcategory description offerPrice normalPricr',
 	populate: {
 		path:'author',
-		select:'name desceiption'
+		select:'name description'
 	},
 	defaults:{
 		author: 'unknown'

@@ -170,7 +170,11 @@ exports.products_create = function (req, res, next) {
 		author: req.userData.userId,
 		description: req.body.description,
 		category: req.body.category,
-		subcategory: req.body.subcategory
+		subcategory: req.body.subcategory,
+		coords:{
+			lat: req.body.lat,
+			lon: req.body.lon
+		}
 	});
 
 	async.parallel([
@@ -218,7 +222,7 @@ exports.products_create = function (req, res, next) {
 					_id: newProduct._id,
 					request: {
 						type: "GET",
-						url: req.headers.host+"/products/" + newProduct.id
+						url: "/products/" + newProduct.id
 					}
 				}
 			});
