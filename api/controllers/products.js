@@ -222,7 +222,7 @@ exports.products_create = function (req, res, next) {
 					_id: newProduct._id,
 					request: {
 						type: "GET",
-						url: "/products/" + newProduct.id
+						url: "/products/" + newProduct._id
 					}
 				}
 			});
