@@ -16,6 +16,8 @@ exports.products_get_all = function (req, res, next) {
 	 .skip(perPage * page)
 	 .limit(perPage)
 	 .populate('author','name')
+	 .populate('category','name _id')
+	 .populate('subcategory','name _id')
  	.exec()
  	.then(products =>{
  		if (products.length>0) {
@@ -105,7 +107,7 @@ exports.products_get_subcategory = function (req, res, next) {
 	if(req.query.high) high = req.query.high;
 	if(req.query.low) low = req.query.low;
 
-	Product.find({subcategory: req.params.subId,offerPrice: {$lte: high, $gte: low}})
+	Product.find({subcategory: req.params.id,offerPrice: {$lte: high, $gte: low}})
 	.skip(perPage * page )
 	.limit(perPage)
 	.populate('author','name')
@@ -158,23 +160,60 @@ exports.products_get_user_products = function (req, res, next) {
 			message:"sorry! found errors on request"});
 	});
 }
+//products by location
+exports.products_get_by_location = function(req,res,next){
+	const perPage = 10;
+	var page = req.query.page;
+	Product.find({
+		location: {
+		 $near: {
+		  $maxDistance: 1000,
+		  $geometry: {
+		   type: "Point",
+		   coordinates: [-112.110492, 36.098948]
+		  }
+		 }
+		}
+	   })
+	.skip(perPage * page)
+	.limit(perPage)
+	.populate('author','name')
+	.exec()
+	.then(products =>{
+		if (products) {
+			res.status(200).json({
+				success: true,
+				entries: products});
+		} else {
+			res.status(404).json({
+				success: false,
+				message:'No entries yet'});
+		}
+	})
+	.catch(err=>{
+		res.status(500).json({
+			success: false,
+			message:err});
+	});
+}
 
 //creating a single product
 exports.products_create = function (req, res, next) {
+	const geoLoc = {
+		type: "Point",
+		coordinates: [req.body.lon,req.body.lat]
+	}
 	
 	const product = new Product({
 		name: req.body.name,
 		normalPrice: req.body.price1,
 		offerPrice: req.body.price2,
-		image: req.file.path,
+		image: req.body.image,
 		author: req.userData.userId,
 		description: req.body.description,
 		category: req.body.category,
 		subcategory: req.body.subcategory,
-		coords:{
-			lat: req.body.lat,
-			lon: req.body.lon
-		}
+		location: geoLoc,
 	});
 
 	async.parallel([
@@ -194,11 +233,11 @@ exports.products_create = function (req, res, next) {
 				callback(err, subcategory);
 			});
 		},
-	], function(err,results){
+	],(err,results)=>{
 		if (err) {
 			res.status(500).json({
 				success: false,
-				message: "Product could not be created"
+				message: err
 			});
 		} else {
 			newProduct = results[0];
@@ -209,23 +248,26 @@ exports.products_create = function (req, res, next) {
 				subcategory.products++;
 				subcategory.save();
 				category.save();
-				return next();
-			}			
-			res.status(201).json({
-				success: true,
-				message: 'your product has been posted',
-				entry: {
-					name: newProduct.name,
-					price1: newProduct.normalPrice,
-					price2: newProduct.offerPrice,
-					image: newProduct.image,
-					_id: newProduct._id,
-					request: {
-						type: "GET",
-						url: "/products/" + newProduct._id
+				console.log(category+'\n'+subcategory);	
+				return res.status(201).json({
+					success: true,
+					message: 'your product has been posted',
+					entry: {
+						name: newProduct.name,
+						price1: newProduct.normalPrice,
+						price2: newProduct.offerPrice,
+						image: newProduct.image,
+						_id: newProduct._id,
 					}
-				}
-			});
+				});
+			}else{
+				res.status(400).json({
+					success: false,
+					message: 'product contained errors',
+				});
+			}
+					
+			
 		}
 
 	});

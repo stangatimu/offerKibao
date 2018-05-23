@@ -32,15 +32,18 @@ const upload = multer({storage: storage,
 
 router.get('/',rateLimit.globalBF.prevent, productsController.products_get_all );
 
+router.get('/location',productsController.products_get_by_location);
+
 router.get('/:id',rateLimit.globalBF.prevent,productsController.products_get_one);
 
 router.get('/category/:id',rateLimit.globalBF.prevent,productsController.products_get_category);
 
-router.get('/subcategory/:subId',rateLimit.globalBF.prevent,productsController.products_get_subcategory);
+router.get('/subcategory/:id',rateLimit.globalBF.prevent,productsController.products_get_subcategory);
 
 router.get('/user/:id',rateLimit.globalBF.prevent,checkAuth,productsController.products_get_user_products);
 
-router.post('/',rateLimit.globalBF.prevent,checkAuth,upload.single('image'), productsController.products_create );
+
+router.post('/',rateLimit.globalBF.prevent,checkAuth, productsController.products_create );
 
 
 router.patch('/:id',rateLimit.globalBF.prevent,checkAuth, productsController.products_patch);
