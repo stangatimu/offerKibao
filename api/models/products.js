@@ -35,6 +35,6 @@ productSchema.index({location:"2dsphere"});
 let Model = mongoose.model('Product', productSchema); 
 Model.SyncToAlgolia();
 Model.SetAlgoliaSettings({
-	searchableAttributes: ['name','description'] 
+	searchableAttributes: ['name','description','category','subcategory'] 
   });
 module.exports = Model
