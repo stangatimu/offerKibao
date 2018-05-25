@@ -9,6 +9,7 @@
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
  exports.users_signup = (req, res, next)=>{
+	 const ejs = false;
 	User.find({email: req.body.email})
 	.exec()
 	.then( user =>{
@@ -39,7 +40,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 						  });
 						  token.save();
 						  //send mail custom function
-						  sendMail(req,res, user, token);
+						  sendMail(req,res, user, token, ejs);
 						  
 						  console.log(result);
 					  })
@@ -64,45 +65,38 @@ exports.email_confirmation = function (req, res, next) {
  
     // Find a matching token
     Token.findOne({ token: req.params.token }, function (err, token) {
-        if (!token) return res.status(400).json({ success: false, message: 'We were unable to find a valid token. Your token my have expired.' });
+        if (!token)  return  res.render("resendConfirm",{message: "We were having trouble activating your account. Your link my have expired. Enter your email below to recieve another link"});
  
         // If we found a token, find a matching user
         User.findOne({ _id: token._userId }, function (err, user) {
-            if (!user) return res.status(400).json({ success: false, message: 'We were unable to find a valid token. Your token my have expired.' });
-            if (user.isVerified) return res.status(400).json({ success: false, message: 'This user has already been verified.' });
+			if (!user) return res.render("passwordCofirm",{message: "We were having trouble activating your account."});
+            if (user.isVerified) return res.render("passwordCofirm",{message: "Your account is already ativated. Please log in."});
  
             // Verify and save the user
             user.isVerified = true;
             user.save(function (err) {
-                if (err) { return res.status(500).json({ success: false, message: err.message }); }
-                res.status(200).json({ success: true, message: 'Account has been verified you can now log in in the app.' });
+                if (err) { return  res.render("resendConfirm",{message: "We were having trouble activating your account. Your link my have expired.Enter your email below to recieve another link"}); }
+                return  res.render("passwordCofirm",{message: "Account has been verified you can now log in in the app"});
             });
         });
     });
 };
 //resend confirmation email
 exports.resend_confirmation = function (req, res, next) {
- 
-    // req.assert('email', 'Email is not valid').isEmail();
-    // req.assert('email', 'Email cannot be blank').notEmpty();
-    // req.sanitize('email').normalizeEmail({ remove_dots: false });
- 
-    // // Check for validation errors    
-    // var errors = req.validationErrors();
-    // if (errors) return res.status(400).send(errors);
+	const ejs = true;
     User.findOne({ email: req.body.email }, function (err, user) {
-        if (!user) return res.status(400).json({ success: true, message: 'check'+req.body.email+ 'for verification link.' });
-        if (user.isVerified) return res.status(400).json({ success: false, message: 'Account has already been verified pliz log in' });
+        if (!user) return res.render("passwordCofirm",{ message: 'Check '+req.body.email+ ' for verification link.' });
+        if (user.isVerified) return res.render("passwordCofirm",{message: "Account is already activated.Please log in."});
  
         // Create a verification token, save it, and send email
         var token = new Token({ _userId: user._id, token: crypto.randomBytes(16).toString('hex') });
  
         // Save the token
         token.save(function (err) {
-            if (err) { return res.status(400).json({ success: false, message: 'pliz try again' }); }
+            if (err) { if (user.isVerified) return res.render("passwordCofirm",{message: "we are having trouble sending you a link. Please try again latter"}); }
  
             // Send email custom fuction
-			sendMail(req,res, user, token)
+			sendMail(req,res, user, token,ejs)
         });
  
     });
@@ -132,7 +126,10 @@ exports.users_profile = function(req,res,next){
 	.then(user =>{
 		res.status(200).json({
 			success: true,
-			user: user
+			user: {
+				name: user.name,
+				email: user.email
+			}
 		});
 	});
 }
@@ -224,7 +221,7 @@ comparePassword = (password1,user,resp)=>{
 }
 
 //send mail function
-sendMail = (req,res, user, token)=>{
+sendMail = (req,res, user, token,ejs)=>{
 	var mail = { 
 		from: '"Stan Gatimu" <stangatimu@gmail.com>', 
 		to: user.email, 
@@ -232,10 +229,14 @@ sendMail = (req,res, user, token)=>{
 		text: 'Hello '+ user.name+',\n\nPlease verify your account by clicking the link: \nhttp:\/\/'+ req.headers.host+'\/users\/confirmation\/' + token.token + '.\n'
 	   };
 	   sgMail.send(mail);
-	
+	   if(ejs != false){
+		   return res.render("passwordCofirm",{message: "A verification email has been sent to" + user.email + ",confirm email to log in."});
+	   }else{
 		res.status(200).json({
-		  success: true,
-		  message:'A verification email has been sent to ' + user.email + ',confirm email to log in.'
-		 });
+			success: true,
+			message:'A verification email has been sent to ' + user.email + ',confirm email to log in.'
+		   });
+
+	   }
 	
 }

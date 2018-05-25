@@ -13,6 +13,7 @@ const categoryRoutes = require('./api/routes/category');
 const userRoutes = require('./api/routes/users');
 const searchRoutes = require('./api/routes/search');
 app.set('trust proxy', +1);
+app.set('view engine','ejs');
 app.use(helmet());
 app.use(morgan('dev'));
 app.use('/uploads',express.static('uploads'));
@@ -36,7 +37,7 @@ app.use((req, res, next)=>{
 });
 
 app.get('/',(req,res,next)=>{
-	res.send("");
+	res.render("resendConfirm");
 });
 app.use('/products', productRoutes);
 app.use('/category', categoryRoutes);
