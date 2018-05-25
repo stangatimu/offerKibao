@@ -37,7 +37,7 @@ app.use((req, res, next)=>{
 });
 
 app.get('/',(req,res,next)=>{
-	res.render("resendConfirm");
+	res.render("home");
 });
 app.use('/products', productRoutes);
 app.use('/category', categoryRoutes);
