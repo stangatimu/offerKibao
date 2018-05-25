@@ -17,24 +17,24 @@ const productSchema = mongoose.Schema({
 	}
 });
 
-// productSchema.plugin(mongooseAlgolia,{
-// 	appId: 'NG3MLLL26O',
-// 	apiKey:'9f227b0ef92a72688924775c7822fb87',
-// 	indexName: 'offerkibaov1',
-// 	selector:'name author category subcategory description offerPrice normalPricr',
-// 	populate: {
-// 		path:'author',
-// 		select:'name description'
-// 	},
-// 	defaults:{
-// 		author: 'unknown'
-// 	}
-// });
+productSchema.plugin(mongooseAlgolia,{
+	appId: 'NG3MLLL26O',
+	apiKey:'9f227b0ef92a72688924775c7822fb87',
+	indexName: 'offerkibaov1',
+	selector:'name author category subcategory description offerPrice normalPricr',
+	populate: {
+		path:'author',
+		select:'name description'
+	},
+	defaults:{
+		author: 'unknown'
+	}
+});
 productSchema.index({location:"2dsphere"});
 
 let Model = mongoose.model('Product', productSchema); 
-// Model.SyncToAlgolia();
-// Model.SetAlgoliaSettings({
-// 	searchableAttributes: ['name','description'] 
-//   });
+Model.SyncToAlgolia();
+Model.SetAlgoliaSettings({
+	searchableAttributes: ['name','description'] 
+  });
 module.exports = Model
