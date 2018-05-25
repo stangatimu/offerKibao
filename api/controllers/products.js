@@ -167,10 +167,10 @@ exports.products_get_by_location = function(req,res,next){
 	Product.find({
 		location: {
 		 $near: {
-		  $maxDistance: 1000,
+		  $maxDistance: req.query.range ,
 		  $geometry: {
 		   type: "Point",
-		   coordinates: [-112.110492, 36.098948]
+		   coordinates: [req.query.lon, req.query.lat]
 		  }
 		 }
 		}
