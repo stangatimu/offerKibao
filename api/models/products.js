@@ -21,9 +21,9 @@ productSchema.plugin(mongooseAlgolia,{
 	appId: 'NG3MLLL26O',
 	apiKey:'9f227b0ef92a72688924775c7822fb87',
 	indexName: 'offerkibaov1',
-	selector:'name author category subcategory description offerPrice normalPricr',
+	selector:'name author category subcategory description offerPrice normalPricre',
 	populate: {
-		path:'author',
+		path:'author category subcategory',
 		select:'name description'
 	},
 	defaults:{
