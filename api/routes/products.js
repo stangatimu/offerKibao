@@ -33,7 +33,9 @@ const upload = multer({storage: storage,
 
 router.get('/',rateLimit.globalBF.prevent, productsController.products_get_all );
 
-router.get('/location',productsController.products_get_by_location);
+router.get('/location',rateLimit.globalBF.prevent,productsController.products_get_by_location);
+
+router.get('/top',rateLimit.globalBF.prevent,productsController.products_get_top);
 
 router.get('/:id',rateLimit.globalBF.prevent,productsController.products_get_one);
 
