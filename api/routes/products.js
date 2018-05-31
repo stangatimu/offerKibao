@@ -4,7 +4,8 @@ const express = require('express'),
  mongoose = require("mongoose"),
  multer = require('multer'),
  productsController = require("../controllers/products.js"),
- rateLimit = require('../middleware/rate-limit');
+ rateLimit = require('../middleware/rate-limit'),
+ likesController = require('../controllers/likes.js');
  
 
  const storage = multer.diskStorage({
@@ -42,9 +43,9 @@ router.get('/subcategory/:id',rateLimit.globalBF.prevent,productsController.prod
 
 router.get('/user/:id',rateLimit.globalBF.prevent,checkAuth,productsController.products_get_user_products);
 
-
 router.post('/',rateLimit.globalBF.prevent,checkAuth, productsController.products_create );
 
+router.post('/likes', rateLimit.globalBF.prevent,checkAuth,likesController.likes_create);
 
 router.patch('/:id',rateLimit.globalBF.prevent,checkAuth, productsController.products_patch);
 

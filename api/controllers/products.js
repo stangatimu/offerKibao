@@ -316,6 +316,12 @@ exports.products_delete = function (req, res, next) {
 			});
 		},
 		function (product, category, subcategory, callback) {
+			if(product.author != req.userData.userId){
+				return res.status(401).json({
+					success: false,
+					message:"You are not authorized to delete this product"
+				});
+			}
 			category.products--;
 			subcategory.products--;
 			subcategory.save();
