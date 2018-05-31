@@ -16,7 +16,18 @@ const productSchema = mongoose.Schema({
 		type: { type: String },
 		coordinates: {type: [Number], default:[0,0]},
 	}
+},{
+	toObject: {virtuals: true},
+	toJSON: {virtuals: true}
 });
+
+productSchema.virtual('cut')
+   .get(function(){
+	   var cut = 0;
+	   cut = (this.normalPrice-this.offerPrice)/this.normalPrice;
+	   cut = cut*100;
+	   return Math.fround(cut).toFixed(0);;
+   });
 
 // productSchema.plugin(mongooseAlgolia,{
 // 	appId: 'NG3MLLL26O',

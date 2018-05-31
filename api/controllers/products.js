@@ -281,7 +281,12 @@ exports.products_create = function (req, res, next) {
 exports.products_patch = function (req, res, next) {
 	const id = req.params.id;
 	Product.findOne({_id: id}, (err,product)=>{
-		if(err)return next(err);
+		if(err || product.author != req.userData.userId){
+			return res.status(403).json({
+				success: false,
+				message: "product could not be edited."
+			})
+		}
 		if(req.body.name) product.name = req.body.name;
 		if(req.body.category) product.category = req.body.category;
 		if(req.body.price1) product.offerPrice = req.body.price1;
@@ -317,7 +322,7 @@ exports.products_delete = function (req, res, next) {
 		},
 		function (product, category, subcategory, callback) {
 			if(product.author != req.userData.userId){
-				return res.status(401).json({
+				return res.status(403).json({
 					success: false,
 					message:"You are not authorized to delete this product"
 				});
