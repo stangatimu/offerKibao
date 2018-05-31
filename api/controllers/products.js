@@ -47,7 +47,7 @@ exports.products_get_top = function (req, res, next) {
 	if(req.query.low) low = req.query.low;
 
 	 Product.find({offerPrice: {$lte: high, $gte: low}})
-	 .sort({rating: -1})
+	 .sort({rating: -1,created: -1})
 	 .skip(perPage * page)
 	 .limit(perPage)
 	 .populate('author','name')
