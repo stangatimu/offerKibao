@@ -267,8 +267,7 @@ exports.products_create = function (req, res, next) {
 			});
 		},
 		function(callback){
-			SubCategory.find(req.body.subcategory,(err,subcategory)=>{
-				
+			SubCategory.findById(req.body.subcategory,(err,subcategory)=>{				
 				callback(err, subcategory);
 			});
 		},
@@ -287,7 +286,6 @@ exports.products_create = function (req, res, next) {
 				subcategory.products++;
 				subcategory.save();
 				category.save();
-				console.log(category+'\n'+subcategory);	
 				return res.status(201).json({
 					success: true,
 					message: 'your product has been posted',
