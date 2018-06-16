@@ -1,4 +1,5 @@
 const Product = require("../models/products.js"),
+      async = require('async'),
 	  mongoose = require("mongoose"),
 	  Category = require("../models/category.js"),
 	  SubCategory = require("../models/subcategory.js");
