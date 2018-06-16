@@ -26,7 +26,7 @@ productSchema.virtual('cut')
 	   var cut = 0;
 	   cut = (this.normalPrice-this.offerPrice)/this.normalPrice;
 	   cut = cut*100;
-	   return Math.fround(cut).toFixed(0);;
+	   return Math.fround(cut).toFixed(0);
    });
 
 productSchema.plugin(mongooseAlgolia,{

@@ -1,6 +1,6 @@
 const Category = require("../models/category.js"),
 	  mongoose = require("mongoose"),
-	  SubCategory = require("../models/subcategory.js")
+	  SubCategory = require("../models/subcategory.js"),
 	  async = require("async");
 
 //main cartegory controllers

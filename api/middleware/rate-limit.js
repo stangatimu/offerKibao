@@ -17,7 +17,7 @@ var handleSE = function (error) {
     };
 }
 exports.userBF = new ExpressBrute(Store, {
-    freeRetries: 15,
+    freeRetries: 50,
     minWait: 5*60*1000, // 5 minutes
     maxWait: 60*60*1000, // 1 hour,
     failCallback: failCB,

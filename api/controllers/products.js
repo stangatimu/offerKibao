@@ -266,7 +266,7 @@ exports.products_create = function (req, res, next) {
 			});
 		},
 		function(callback){
-			SubCategory.findById(req.body.subcategory,(err,subcategory)=>{
+			SubCategory.find(req.body.subcategory,(err,subcategory)=>{
 				
 				callback(err, subcategory);
 			});

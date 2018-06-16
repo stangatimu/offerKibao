@@ -29,7 +29,8 @@
     "mongoose-algolia": "^1.7.1",
     "morgan": "^1.9.0",
     "multer": "^1.3.0",
-    "nodemailer": "^4.6.4"
+    "nodemailer": "^4.6.4",
+    "passport-google-plus-token": "^2.1.0"
   },
   "devDependencies": {
     "nodemon": "^1.14.11",
