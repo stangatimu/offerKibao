@@ -74,7 +74,7 @@ exports.products_get_top = function (req, res, next) {
 }
 //getting a particular products
 exports.products_get_one = function (req, res, next) {
-	Product.findById(req.params.id)
+	Product.find({_id: req.params.id})
 	.populate('author','name')
 	.populate('category','name _id')
 	.populate('subcategory','name _id')
