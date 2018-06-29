@@ -48,7 +48,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 	            	console.log(err);
 	            	res.status(500).json({
 						success: false,
-	            		error: err
+	            		error: err.message
 	            	});
 	            });
                }
