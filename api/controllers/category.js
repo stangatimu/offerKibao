@@ -75,7 +75,8 @@ exports.get_subccategories = function (req, res, next) {
 		if (category) {
 			res.status(200).json({
 			   success:true, 
-			   yoyo:category});
+			   item:category.subcategories
+			});
 		} else {
 			res.status(404).json({
 			   success: false, 
