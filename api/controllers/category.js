@@ -66,6 +66,26 @@ exports.category_delete = function (req, res, next) {
 //sub category controllers/
 ///////////////////////////
 
+//get subcategories for one ctegory
+exports.get_subccategories = function (req, res, next) {
+	Category.find({name: req.params.name})
+   .populate('subcategories','name _id products')
+	.exec()
+	.then(category =>{
+		if (category) {
+			res.status(200).json({
+			   success:true, 
+			   subcategories:category.subcategories});
+		} else {
+			res.status(404).json({
+			   success: false, 
+			   message:'No entries found'});
+		}
+	})
+	.catch(err=>{
+		res.status(500).json({error:err});
+	});
+}
 // create a subcategory
 exports.subcategory_create = function (req, res, next) {
 	const subcategory = new SubCategory({

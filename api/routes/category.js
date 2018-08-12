@@ -1,7 +1,6 @@
 const express = require('express'),
  router = express.Router(),
  checkAuth = require("../middleware/checkAuth.js"),
- mongoose = require("mongoose"),
  multer = require('multer'),
  categoryController = require("../controllers/category.js");
  
@@ -30,6 +29,8 @@ const upload = multer({storage: storage,
                      });
 
 router.get('/', categoryController.category_get_all ); 
+
+router.get('/:name', categoryController.get_subccategories );
 
 router.post('/',upload.single('image'), categoryController.category_create);
 
