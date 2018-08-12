@@ -68,14 +68,14 @@ exports.category_delete = function (req, res, next) {
 
 //get subcategories for one ctegory
 exports.get_subccategories = function (req, res, next) {
-	Category.find({name: req.params.name})
+	Category.findOne({name: req.params.name})
    .populate('subcategories','name _id products')
 	.exec()
 	.then(category =>{
 		if (category) {
 			res.status(200).json({
 			   success:true, 
-			   item:category
+			   item:category.subcategories
 			});
 		} else {
 			res.status(404).json({
