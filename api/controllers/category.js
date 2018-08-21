@@ -45,6 +45,25 @@ exports.category_create = function (req, res, next) {
 		}
 	});
 }
+//edit category
+exports.category_edit = function (req, res, next) {
+	var id = req.params.id;
+	Category.findOne({_id: id}).exec()
+	.then(category =>{
+		category.image = req.body.image
+		category.save()
+		res.status(200).json({
+			success: true,
+			message:'edit successfull',
+			result: category
+        });
+	})
+	.catch(err=>{
+		res.status(500).json({
+			success:false,
+			error:err.message});
+	});
+}
 
 
 exports.category_delete = function (req, res, next) {

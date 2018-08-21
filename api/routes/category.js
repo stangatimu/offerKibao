@@ -30,6 +30,8 @@ const upload = multer({storage: storage,
 
 router.get('/', categoryController.category_get_all ); 
 
+router.patch('/edit/:id',categoryController.category_edit);
+
 router.get('/:name', categoryController.get_subccategories );
 
 router.post('/',upload.single('image'), categoryController.category_create);
