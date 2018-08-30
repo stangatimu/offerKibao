@@ -160,10 +160,7 @@ exports.users_edit = function(req,res,next){
 		user.save();
 		res.status(200).json({
 			success: true,
-			message: "changes saved successfully",
-			user: {
-				dp: user.dp
-			}
+			message: "changes saved successfully"
 		})
 		
 	});
