@@ -50,6 +50,11 @@ exports.category_edit = function (req, res, next) {
 	var id = req.params.id;
 	Category.findOne({_id: id}).exec()
 	.then(category =>{
+		if(category == null){
+			return res.status(404).json({
+				success:false,
+				error:'no entry found'}); 
+		}
 		category.image = req.body.image
 		category.save()
 		res.status(200).json({

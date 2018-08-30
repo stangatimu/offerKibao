@@ -65,7 +65,8 @@ exports.email_confirmation = function (req, res, next) {
  
     // Find a matching token
     Token.findOne({ token: req.params.token }, function (err, token) {
-        if (!token)  return  res.render("resendConfirm",{message: "We were having trouble activating your account. Your link my have expired. Enter your email below to recieve another link"});
+        if (!token)  return  res.render("resendConfirm",{
+			message: "We were having trouble activating your account. Your link my have expired. Enter your email below to recieve another link"});
  
         // If we found a token, find a matching user
         User.findOne({ _id: token._userId }, function (err, user) {
@@ -128,7 +129,9 @@ exports.users_profile = function(req,res,next){
 			success: true,
 			user: {
 				name: user.name,
-				email: user.email
+				email: user.email,
+				id: user._id,
+				dp: user.dp
 			}
 		});
 	});
@@ -139,6 +142,7 @@ exports.users_edit = function(req,res,next){
 		if(err)return next(err);
 		if(req.body.name) user.name = req.body.name;
 		if(req.body.email) user.email = req.body.email;
+		if(req.body.dp) user.dp = req.body.dp;
 		if(req.body.city) user.address.city = req.body.city;
 		if(req.body.street) user.address.street = req.body.street;
 		if(req.body.password){
@@ -177,7 +181,7 @@ exports.users_delete = function (req, res, next) {
 		res.status(500).json({
 			success: false,
 			error:err});
-	});
+	}); 
 }
 
 //compare password function(bodyPassword, user, res)
@@ -230,7 +234,7 @@ sendMail = (req,res, user, token,ejs)=>{
 	   };
 	   sgMail.send(mail);
 	   if(ejs != false){
-		   return res.render("passwordCofirm",{message: "A verification email has been sent to" + user.email + ",confirm email to log in."});
+		   return res.render("passwordCofirm",{message: "A verification email has been sent to " + user.email + ", confirm email to log in."});
 	   }else{
 		res.status(200).json({
 			success: true,
