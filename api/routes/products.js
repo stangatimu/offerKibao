@@ -20,7 +20,7 @@ router.get('/category/:id',rateLimit.globalBF.prevent,productsController.product
 
 router.get('/subcategory/:id',rateLimit.globalBF.prevent,productsController.products_get_subcategory);
 
-router.get('/user/:id',rateLimit.globalBF.prevent,checkAuth,productsController.products_get_user_products);
+router.get('/user/:id',rateLimit.globalBF.prevent,productsController.products_get_user_products);
 
 router.post('/',rateLimit.globalBF.prevent,checkAuth, productsController.products_create );
 
