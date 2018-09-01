@@ -185,6 +185,7 @@ exports.products_get_user_products = function (req, res, next) {
 		if (products) {
 			res.status(200).json({
 				success: true,
+				count: products.length,
 				entries: products});
 		} else {
 			res.status(404).json({
@@ -257,11 +258,6 @@ exports.products_create = function (req, res, next) {
 
 	async.parallel([
 		function(callback){
-			Product.create(product,(err, newProduct)=>{
-				callback(err, newProduct);
-			});
-		},
-		function(callback){
 			Category.findById(req.body.category,(err,category)=>{
 				callback(err, category);
 			});
@@ -278,24 +274,36 @@ exports.products_create = function (req, res, next) {
 				message: err
 			});
 		} else {
-			newProduct = results[0];
-			category = results[1];
-			subcategory = results[2];
+			category = results[0];
+			subcategory = results[1];
 			if (category != null && subcategory != null) {
-				category.products++;
-				subcategory.products++;
-				subcategory.save();
-				category.save();
-				return res.status(201).json({
-					success: true,
-					message: 'your product has been posted',
-					entry: {
-						name: newProduct.name,
-						price1: newProduct.normalPrice,
-						price2: newProduct.offerPrice,
-						image: newProduct.image,
-						_id: newProduct._id,
+				Product.create(product)
+				.exec()
+				.then(newProduct =>{
+					category.products++;
+				    subcategory.products++;
+				    subcategory.save();
+				    category.save();
+				    return res.status(201).json({
+					      success: true,
+					      message: 'your product has been posted',
+					      entry: {
+						     name: newProduct.name,
+						     price1: newProduct.normalPrice,
+						     price2: newProduct.offerPrice,
+						     image: newProduct.image,
+						     _id: newProduct._id,
 					}
+
+				})
+				.catch(err =>{
+					res.status(500).json({
+						success: false,
+						message: err.message //'product could not be saved',
+					});
+
+				}); 
+				
 				});
 			}else{
 				res.status(400).json({

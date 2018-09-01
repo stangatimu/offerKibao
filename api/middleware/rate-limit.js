@@ -5,7 +5,7 @@ const ExpressBrute = require('express-brute'),
 var failCB = function (req, res, next, nextValidRequestDate) {
     res.status(401).json({
         succcess: false,
-        message: "sorry! found errors on request"
+        message: "sorry! too many requests"
 
     });
 };

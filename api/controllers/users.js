@@ -1,4 +1,6 @@
  const User = require("../models/users.js"),
+	   Product = require("../models/products"),
+	   async = require('async'),
        mongoose = require("mongoose"),
 	   bcrypt = require("bcrypt"),
 	   crypto = require("crypto"),
@@ -57,7 +59,10 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 		}
 	})
 	.catch(e =>{
-		console.log(e)
+		res.status(500).json({
+			success: false,
+			error: e.message
+		});
 	} );
 }
 //account or email confirmation
@@ -118,23 +123,48 @@ exports.users_login = (req, res, next)=>{
 		comparePassword(req.body.password,user,res);
 		
 	})
-	.catch(e =>{console.log(e)});
+	.catch(e =>{
+		res.status(500).json({
+			success: false,
+			error: e.message
+		});
+	});
 }
 //display profile
 exports.users_profile = function(req,res,next){
-	User.findOne({_id: req.userData.userId})
-	.exec()
-	.then(user =>{
-		res.status(200).json({
-			success: true,
-			user: {
-				name: user.name,
-				email: user.email,
-				id: user._id,
-				dp: user.dp
+	async.waterfall([
+		function(callback){
+			User.findById(req.userData.userId,(err,user)=>{
+				callback(err,user)
+			})
+			
+		},
+		function(user,callback){
+			Product.find({author: user._id},(err,products)=>{
+				callback(err,user,products)
+			})
+		},
+		function(user,products){
+			if(user == undefined){
+				return res.status(500).json({
+					success: false,
+					error: "sorry! user not found"
+				});		
 			}
-		});
-	});
+			res.status(200).json({
+				success: true,
+				user: {
+					name: user.name,
+					count: products.length,
+					email: user.email,
+					id: user._id,
+					dp: user.dp
+				}
+			});
+
+
+		}
+	])
 }
 //edit profile
 exports.users_edit = function(req,res,next){
