@@ -7,7 +7,7 @@ var storeSchema = new mongoose.Schema({
       "lastRequest": Date,
       "firstRequest": Date
     },
-    "expires": Date
+    "expires": 86400
   });
 
 module.exports = mongoose.model('Store',storeSchema);
