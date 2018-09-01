@@ -195,7 +195,7 @@ exports.products_get_user_products = function (req, res, next) {
 	.catch(err=>{
 		res.status(500).json({
 			success: false,
-			message:"sorry! found errors on request"});
+			message:errr.message});
 	});
 }
 //products by location
