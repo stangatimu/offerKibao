@@ -1,4 +1,5 @@
 const Like =  require("../models/likes.js"),
+async = require('async'),
 Product =  require("../models/products.js");
 
 //creating a new like
