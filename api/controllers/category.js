@@ -6,7 +6,7 @@ const Category = require("../models/category.js"),
 //main cartegory controllers
 exports.category_get_all = function (req, res, next) {
 	 Category.find()
-	.populate('subcategories','name _id products')
+	.select('name image products')
  	.exec()
  	.then(category =>{
  		if (category) {
@@ -112,10 +112,35 @@ exports.get_subccategories = function (req, res, next) {
 	});
 }
 // create a subcategory
-exports.subcategory_create = function (req, res, next) {
+exports.subcategory_create = async function (req, res, next) {
 	const subcategory = new SubCategory({
 		name: req.body.name
 	});
+
+	try{
+		let category = await Category.findById(req.body.category);
+		if(category != null){
+			const newSubcategory = await SubCategory.create(subcategory);
+			category.subcategories.push(newSubcategory._id);
+			category.save();
+			return res.status(200).json({
+				success: true,
+				message:"subcategory has been created",
+				category: category
+			})
+		}
+		return res.status(400).json({
+			success: false,
+			message:"subcategory could not be created"
+		}) 
+	}catch(err){
+		res.status(500).json({
+			success: false,
+			message:"subcategory could not be created"
+		})
+
+	}
+
 
 	async.waterfall([
 		function(callback){
@@ -130,13 +155,7 @@ exports.subcategory_create = function (req, res, next) {
 		function(newSubCategory,callback){
 			Category.findOne({_id: req.body.category},(err,category)=>{
 				if(err) return next(err);
-				category.subcategories.push(newSubCategory._id);
-				category.save();
-				res.status(200).json({
-					success: true,
-					message:"subcategory has been created",
-					category: category
-				})
+				
 
 			});
 		}

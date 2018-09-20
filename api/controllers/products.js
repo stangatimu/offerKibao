@@ -238,87 +238,41 @@ exports.products_get_by_location = function(req,res,next){
 }
 
 //creating a single product
-exports.products_create = function (req, res, next) {
+exports.products_create = async function (req, res, next) {
 	const geoLoc = {
 		type: "Point",
 		coordinates: [req.body.lon,req.body.lat]
+	}	
+	try{
+		const category = await Category.findById(req.body.category);
+		const subcategory = await SubCategory.findById(req.body.subcategory);
+		const product =  new Product({
+			name: req.body.name,
+			normalPrice: req.body.price1,
+			offerPrice: req.body.price2,
+			image: req.body.image,
+			author: req.userData.userId,
+			description: req.body.description,
+			category: category._id,
+			subcategory: subcategory._id,
+			location: geoLoc,
+		});
+		const newProduct = await Product.create(product);
+		category.products++;
+		subcategory.products++;
+		subcategory.save();
+		category.save();
+		return res.status(201).json({
+			success: true,
+			message: 'your product has been posted',
+			entry: newProduct
+		});
+	}catch(err){
+		return res.status(400).json({
+			success: true,
+			message: `Sorry, product could not be posted`
+		})
 	}
-	
-	const product = new Product({
-		name: req.body.name,
-		normalPrice: req.body.price1,
-		offerPrice: req.body.price2,
-		image: req.body.image,
-		author: req.userData.userId,
-		description: req.body.description,
-		category: req.body.category,
-		subcategory: req.body.subcategory,
-		location: geoLoc,
-	});
-
-	async.parallel([
-		function(callback){
-			Category.findById(req.body.category,(err,category)=>{
-				callback(err, category);
-			});
-		},
-		function(callback){
-			SubCategory.findById(req.body.subcategory,(err,subcategory)=>{				
-				callback(err, subcategory);
-			});
-		},
-	],(err,results)=>{
-		if (err) {
-			res.status(500).json({
-				success: false,
-				message: err
-			});
-		} else {
-			category = results[0];
-			subcategory = results[1];
-			if (category != null && subcategory != null) {
-				Product.create(product)
-				.exec()
-				.then(newProduct =>{
-					category.products++;
-				    subcategory.products++;
-				    subcategory.save();
-				    category.save();
-				    return res.status(201).json({
-					      success: true,
-					      message: 'your product has been posted',
-					      entry: {
-						     name: newProduct.name,
-						     price1: newProduct.normalPrice,
-						     price2: newProduct.offerPrice,
-						     image: newProduct.image,
-						     _id: newProduct._id,
-					}
-
-				})
-				.catch(err =>{
-					res.status(500).json({
-						success: false,
-						message: err.message //'product could not be saved',
-					});
-
-				}); 
-				
-				});
-			}else{
-				res.status(400).json({
-					success: false,
-					message: 'product contained errors',
-				});
-			}
-					
-			
-		}
-
-	});
-	
-		
-	
 }
 
 //editing a particular product
@@ -342,56 +296,37 @@ exports.products_patch = function (req, res, next) {
 			success: true,
 			message: "changes saved successfully",
 			product: product
-		})
-		
+		})	
 	});
 }
 //deleting a product
-exports.products_delete = function (req, res, next) {
-	
-	async.waterfall([
-		function(callback){
-			Product.findById(req.params.id,(err,product)=>{
-				callback(err,product);
+exports.products_delete = async function (req, res, next) {
+	try{
+		const product = await Product.findById(req.params.id);
+		const category = await Category.findById(product.category);
+		const subcategory = await SubCategory.findById(product.SubCategory);
+		if(product.author != req.userData.userId){
+			return res.status(403).json({
+				success: false,
+				message:"You are not authorized to delete this product"
 			});
-		},
-		function(product,callback){
-			Category.findById(product.category,(err,category)=>{
-				callback(err,product,category);
-			});
-		},
-		function(product,category,callback){
-			SubCategory.findById(product.subcategory,(err,subcategory)=>{
-				callback(err,product,category,subcategory);
-			});
-		},
-		function (product, category, subcategory, callback) {
-			if(product.author != req.userData.userId){
-				return res.status(403).json({
-					success: false,
-					message:"You are not authorized to delete this product"
-				});
-			}
-			category.products--;
-			subcategory.products--;
-			subcategory.save();
-			category.save();
-			Product.remove({ _id: product._id }).exec()
-				.then(result => {
-					res.status(200).json({
-						success: true,
-						message: "Product has been deleted",
-					});
-				})
-				.catch(err => {
-					res.status(500).json({
-						success: false,
-						message: err
-					});
-				});
-
 		}
+		category.products--;
+		subcategory.products--;
+		subcategory.save();
+		category.save();
+		Product.remove({ _id: product._id });
 
-	]);
+		return	res.status(200).json({
+				success: true,
+				message: "Product has been deleted",
+			});
 	
+		
+	}catch(err){
+		res.status(500).json({
+			success: false,
+			message: err
+		});
+	}	
 }

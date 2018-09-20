@@ -19,7 +19,7 @@ var handleSE = function (error) {
 exports.userBF = new ExpressBrute(Store, {
     freeRetries: 200,
     minWait: 5*60*1000, // 5 minutes
-    maxWait: 60*60*1000, // 1 hour,
+    maxWait: 60*60*60, // 1 hour,
     failCallback: failCB,
     handleStoreError: handleSE
 });
@@ -27,9 +27,9 @@ exports.globalBF= new ExpressBrute(Store, {
     freeRetries: 500,
     attachResetToRequest: false,
     refreshTimeoutOnRequest: false,
-    minWait: 25*60*60*1000, // 1 day 1 hour 
-    maxWait: 25*60*60*1000, // 1 day 1 hour 
+    minWait: 25*60*60*60, // 1 day 1 hour 
+    maxWait: 25*60*60*60, // 1 day 1 hour 
     lifetime: 24*60*60, // 1 day
     failCallback: failCB,
     handleStoreError: handleSE
-}); 
+});

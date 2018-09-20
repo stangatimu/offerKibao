@@ -17,7 +17,6 @@ exports.likes_create = (req,res,next)=>{
                         success: false,
                         message: "Sorry, product not found."
                     });
-
                 }
                 //if we find a product we decreament the rating and delete the like
                 product.rating--;
@@ -35,7 +34,6 @@ exports.likes_create = (req,res,next)=>{
 						message: "Sorry, product not found"
 					});
 				});
-
             });
         }else{
           async.parallel([
@@ -70,9 +68,6 @@ exports.likes_create = (req,res,next)=>{
               })
           });
         }
-
-
-    });   
-
+    });
 }
 

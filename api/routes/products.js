@@ -1,8 +1,6 @@
 const express = require('express'),
  router = express.Router(),
  checkAuth = require("../middleware/checkAuth.js"),
- mongoose = require("mongoose"),
- multer = require('multer'),
  productsController = require("../controllers/products.js"),
  rateLimit = require('../middleware/rate-limit'),
  likesController = require('../controllers/likes.js');
