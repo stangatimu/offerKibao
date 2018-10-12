@@ -12,6 +12,13 @@ const productSchema = mongoose.Schema({
 	image: {type: String, required: true},
 	description: {type: String, required: true},
 	created:{type: Date, default: Date.now},
+	expireAt :{type: Date,
+		 default: function() {
+			 let x = new Date();
+			 return new Date(x.setMonth(x.getMonth() + 1));
+		}
+	},
+	link:{type:String, default:" "},
 	location: {
 		type: { type: String },
 		coordinates: {type: [Number], default:[0,0]},
@@ -29,24 +36,24 @@ productSchema.virtual('cut')
 	   return Math.fround(cut).toFixed(0);
    });
 
-// productSchema.plugin(mongooseAlgolia,{
-// 	appId: 'NG3MLLL26O',
-// 	apiKey:'9f227b0ef92a72688924775c7822fb87',
-// 	indexName: 'offerkibaov1',
-// 	selector:'name image author cut category subcategory description offerPrice normalPrice',
-// 	populate: {
-// 		path:'author category subcategory',
-// 		select:'name description'
-// 	},
-// 	defaults:{
-// 		author: 'unknown'
-// 	}
-// });
-productSchema.index({location:"2dsphere"});
+productSchema.plugin(mongooseAlgolia,{
+	appId: process.env.appId,
+	apiKey:process.env.apiKey,
+	indexName: 'offerkibaov1',
+	selector:'name image author cut category subcategory description offerPrice normalPrice',
+	populate: {
+		path:'author category subcategory',
+		select:'name description'
+	},
+	defaults:{
+		author: 'unknown'
+	}
+});
+productSchema.index({location:"2dsphere"},{ expireAt: 1 }, { expireAfterSeconds : 0 });
 
 let Model = mongoose.model('Product', productSchema); 
-// Model.SyncToAlgolia();
-// Model.SetAlgoliaSettings({
-// 	searchableAttributes: ['name','description','category','subcategory'] 
-//   });
+Model.SyncToAlgolia();
+Model.SetAlgoliaSettings({
+	searchableAttributes: ['name','description','category','subcategory'] 
+  });
 module.exports = Model

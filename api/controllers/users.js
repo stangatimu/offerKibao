@@ -273,3 +273,35 @@ sendMail = (req,res, user, token,ejs)=>{
 	   }
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+exports.deleteProperty = async function(req,res,next){
+	   try{
+		property = await Property.findById(prodId);
+		orders = await Oders.find({prodId: property._id});
+		property.remove();
+		orders.forEach(order => {
+			order.remove();			
+		});
+
+	   }catch(err){
+		   console.log(err)
+	   }
+	   
+
+   }

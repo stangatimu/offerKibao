@@ -19,22 +19,10 @@ exports.likes_create = (req,res,next)=>{
                         message: "Sorry, product not found."
                     });
                 }
-                //if we find a product we decreament the rating and delete the like
-                product.rating--;
-                product.save();
-                Like.remove({ _id: like._id }).exec()
-				.then(result => {
-					res.status(200).json({
-						success: true,
-						rating: product.rating,
-					});
-				})
-				.catch(err => {
-					res.status(500).json({
-						success: false,
-						message: "Sorry, product not found"
-					});
-				});
+                return res.status(200).json({
+                    success: true,
+                    rating: product.rating,
+                });
             });
         }else{
           async.parallel([

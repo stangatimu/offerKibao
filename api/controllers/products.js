@@ -256,6 +256,8 @@ exports.products_create = async function (req, res, next) {
 			category: category._id,
 			subcategory: subcategory._id,
 			location: geoLoc,
+			link: req.body.link,
+			expireAt: req.body.expireAt
 		});
 		const newProduct = await Product.create(product);
 		category.products++;
