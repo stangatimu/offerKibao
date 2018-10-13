@@ -49,7 +49,8 @@ productSchema.plugin(mongooseAlgolia,{
 		author: 'unknown'
 	}
 });
-productSchema.index({location:"2dsphere"},{ expireAt: 1 }, { expireAfterSeconds : 0 });
+productSchema.index({location:"2dsphere"});
+productSchema.index({ expireAt: 1 }, { expireAfterSeconds : 0 })
 
 let Model = mongoose.model('Product', productSchema); 
 Model.SyncToAlgolia();
