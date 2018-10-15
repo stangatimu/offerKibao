@@ -173,8 +173,7 @@ exports.users_edit = function(req,res,next){
 		if(req.body.name) user.name = req.body.name;
 		if(req.body.email) user.email = req.body.email;
 		if(req.body.dp) user.dp = req.body.dp;
-		if(req.body.city) user.address.city = req.body.city;
-		if(req.body.street) user.address.street = req.body.street;
+		if(req.body.bio) user.bio = req.body.bio;
 		if(req.body.password){
 			bcrypt.hash(req.body.password,10, (err, hash)=>{
 				if (err) {
