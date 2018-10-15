@@ -158,7 +158,8 @@ exports.users_profile = function(req,res,next){
 					count: products.length,
 					email: user.email,
 					id: user._id,
-					dp: user.dp
+					dp: user.dp,
+					bio:user.bio
 				}
 			});
 

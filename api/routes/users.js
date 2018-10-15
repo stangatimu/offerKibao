@@ -15,7 +15,7 @@ router.post("/login",rateLimit.userBF.prevent,usersController.users_login);
 
 router.delete('/delete',rateLimit.userBF.prevent,checkAuth, usersController.users_delete);
 
-router.get('/profile',rateLimit.userBF.prevent,checkAuth, usersController.users_profile);
+router.get('/profile',rateLimit.userBF.prevent,usersController.users_profile);
 
 router.patch('/edit',rateLimit.userBF.prevent,checkAuth, usersController.users_edit);
 
