@@ -134,7 +134,7 @@ exports.users_login = (req, res, next)=>{
 exports.users_profile = function(req,res,next){
 	async.waterfall([
 		function(callback){
-			User.findById(req.userData.userId,(err,user)=>{
+			User.findById(req.query.id,(err,user)=>{
 				callback(err,user)
 			})
 			
