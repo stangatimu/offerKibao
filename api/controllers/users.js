@@ -131,41 +131,30 @@ exports.users_login = (req, res, next)=>{
 	});
 }
 //display profile
-exports.users_profile = function(req,res,next){
-	async.waterfall([
-		function(callback){
-			User.findById(req.query.id,(err,user)=>{
-				callback(err,user)
-			})
-			
-		},
-		function(user,callback){
-			Product.find({author: user._id},(err,products)=>{
-				callback(err,user,products)
-			})
-		},
-		function(user,products){
-			if(user == undefined){
-				return res.status(500).json({
-					success: false,
-					error: "sorry! user not found"
-				});		
-			}
-			res.status(200).json({
+exports.users_profile = async function(req,res,next){
+	try{
+		let user = await User.findById(req.query.id);
+		const products = await Product.find({author: user._id}).count();
+		return res.status(200).json({
 				success: true,
 				user: {
 					name: user.name,
-					count: products.length,
+					count: products,
 					email: user.email,
 					id: user._id,
 					dp: user.dp,
 					bio:user.bio
 				}
-			});
 
+		});
+	}catch(e){
+		return res.status(404).json({
+			success: false,
+			error: "sorry! user not found"
+		});
 
-		}
-	])
+	}
+	
 }
 //edit profile
 exports.users_edit = function(req,res,next){
@@ -209,7 +198,7 @@ exports.users_delete = function (req, res, next) {
 	.catch(err=>{
 		res.status(500).json({
 			success: false,
-			error:err});
+			error:"User could not be found!"});
 	}); 
 }
 
