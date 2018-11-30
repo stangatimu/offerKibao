@@ -4,7 +4,7 @@ const Product = require("../models/products.js"),
 
 //getting all products
 exports.products_get_all = function (req, res, next) {
-	const perPage = req.query.per || 10;
+	var perPage = parseInt(req.query.per) || 10;
 	var page = req.query.page;
 	var high = 100000000;
 	var low = 0;
@@ -31,6 +31,7 @@ exports.products_get_all = function (req, res, next) {
  		}
  	})
  	.catch(err=>{
+		 console.log(err.message)
  		res.status(500).json({
 			success: false, 
 			message:"sorry! found errors on request"});
@@ -38,7 +39,7 @@ exports.products_get_all = function (req, res, next) {
 }
 //getting trending products
 exports.products_get_top = function (req, res, next) {
-	const perPage = req.query.per || 10;
+	const perPage = parseInt(req.query.per) || 10;
 	var page = req.query.page;
 	var high = 100000000;
 	var low = 0;
@@ -100,7 +101,7 @@ exports.products_get_one = function (req, res, next) {
 }
 //getting products in a specific cartegory
 exports.products_get_category = function (req, res, next) {
-	const perPage = req.query.per || 10;
+	const perPage = parseInt(req.query.per) || 10;
 	var page = req.query.page;
 	var high = 100000000;
 	var low = 0;
@@ -134,7 +135,7 @@ exports.products_get_category = function (req, res, next) {
 }
 // getting all products in a subcategory
 exports.products_get_subcategory = function (req, res, next) {
-	const perPage = req.query.per || 10;
+	const perPage = parseInt(req.query.per) || 10;
 	var page = req.query.page;
 	var high = 100000000;
 	var low = 0;
@@ -168,7 +169,7 @@ exports.products_get_subcategory = function (req, res, next) {
 }
 //getting all products by a specific user
 exports.products_get_user_products = function (req, res, next) {
-	const perPage = req.query.per || 10;
+	const perPage = parseInt(req.query.per) || 10;
 	var page = req.query.page;
 
 	Product.find({author: req.params.id})
@@ -199,7 +200,7 @@ exports.products_get_user_products = function (req, res, next) {
 }
 //products by location
 exports.products_get_by_location = function(req,res,next){
-	const perPage = req.query.per || 10;
+	const perPage = parseInt(req.query.per) || 10;
 	var page = req.query.page;
 	var high = 100000000;
 	var low = 0;
