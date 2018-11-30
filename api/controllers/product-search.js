@@ -9,10 +9,13 @@ exports.products_search = function(req, res, next){
             message:"sorry! found errors on request"
         });
     }
+    index.setSettings({
+        attributesToHighlight:['name','description']
+    })
     index.search({
         query: req.query.query,
         page: req.query.page,
-        hitsPerPage: parseInt(req.query.per) || 10
+        hitsPerPage: parseInt(req.query.per) || 10,
     },
     (err,content)=>{
         res.status(200).json({
