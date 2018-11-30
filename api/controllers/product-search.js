@@ -12,6 +12,7 @@ exports.products_search = function(req, res, next){
     index.search({
         query: req.query.query,
         page: req.query.page,
+        hitsPerPage: parseInt(req.query.per) || 10
     },
     (err,content)=>{
         res.status(200).json({
