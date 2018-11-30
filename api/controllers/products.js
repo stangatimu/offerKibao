@@ -1,12 +1,10 @@
 const Product = require("../models/products.js"),
-      async = require('async'),
-	  mongoose = require("mongoose"),
 	  Category = require("../models/category.js"),
 	  SubCategory = require("../models/subcategory.js");
 
 //getting all products
 exports.products_get_all = function (req, res, next) {
-	const perPage = 10;
+	const perPage = req.query.per || 10;
 	var page = req.query.page;
 	var high = 100000000;
 	var low = 0;
@@ -40,7 +38,7 @@ exports.products_get_all = function (req, res, next) {
 }
 //getting trending products
 exports.products_get_top = function (req, res, next) {
-	const perPage = 10;
+	const perPage = req.query.per || 10;
 	var page = req.query.page;
 	var high = 100000000;
 	var low = 0;
@@ -102,7 +100,7 @@ exports.products_get_one = function (req, res, next) {
 }
 //getting products in a specific cartegory
 exports.products_get_category = function (req, res, next) {
-	const perPage = 10;
+	const perPage = req.query.per || 10;
 	var page = req.query.page;
 	var high = 100000000;
 	var low = 0;
@@ -136,7 +134,7 @@ exports.products_get_category = function (req, res, next) {
 }
 // getting all products in a subcategory
 exports.products_get_subcategory = function (req, res, next) {
-	const perPage = 10;
+	const perPage = req.query.per || 10;
 	var page = req.query.page;
 	var high = 100000000;
 	var low = 0;
@@ -170,7 +168,7 @@ exports.products_get_subcategory = function (req, res, next) {
 }
 //getting all products by a specific user
 exports.products_get_user_products = function (req, res, next) {
-	const perPage = 10;
+	const perPage = req.query.per || 10;
 	var page = req.query.page;
 
 	Product.find({author: req.params.id})
@@ -201,8 +199,12 @@ exports.products_get_user_products = function (req, res, next) {
 }
 //products by location
 exports.products_get_by_location = function(req,res,next){
-	const perPage = 10;
+	const perPage = req.query.per || 10;
 	var page = req.query.page;
+	var high = 100000000;
+	var low = 0;
+	if(req.query.high) high = req.query.high;
+	if(req.query.low) low = req.query.low;
 	Product.find({
 		location: {
 		 $near: {
@@ -213,6 +215,7 @@ exports.products_get_by_location = function(req,res,next){
 		  }
 		 }
 		}
+		,offerPrice: {$lte: high, $gte: low}
 	   })
 	   .sort({created: -1})
 	.skip(perPage * page)
