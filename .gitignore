@@ -1,4 +1,5 @@
 ﻿node_modules/
 uploads/
+nodemon.json
 .vscode/
 api/middleware/productOps.js

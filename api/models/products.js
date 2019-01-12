@@ -39,7 +39,7 @@ productSchema.virtual('cut')
 productSchema.plugin(mongooseAlgolia,{
 	appId: process.env.appId,
 	apiKey:process.env.apiKey,
-	indexName: 'offerkibaov1',
+	indexName: process.env.indexName,
 	selector:'name image author cut category subcategory description offerPrice normalPrice',
 	populate: {
 		path:'author category subcategory',

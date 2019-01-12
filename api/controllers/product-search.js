@@ -1,6 +1,6 @@
 const algoliasearch = require('algoliasearch'),
-      client = algoliasearch('NG3MLLL26O','9f227b0ef92a72688924775c7822fb87'),
-      index = client.initIndex('offerkibaov1');
+      client = algoliasearch(process.env.appId,process.env.apiKey),
+      index = client.initIndex(process.env.indexName);
 
 exports.products_search = function(req, res, next){
     if(req.query.query == ''){

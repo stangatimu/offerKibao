@@ -1,6 +1,5 @@
  const User = require("../models/users.js"),
 	   Product = require("../models/products"),
-	   async = require('async'),
        mongoose = require("mongoose"),
 	   bcrypt = require("bcrypt"),
 	   crypto = require("crypto"),
